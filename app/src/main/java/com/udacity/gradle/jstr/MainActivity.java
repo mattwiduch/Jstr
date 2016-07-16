@@ -1,7 +1,7 @@
 package com.udacity.gradle.jstr;
 
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -9,8 +9,8 @@ import android.widget.Toast;
 
 import eu.redray.JokeTeller;
 
-
-public class MainActivity extends ActionBarActivity {
+/** Jstr base activity. */
+public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +41,10 @@ public class MainActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /** Displays toast with a joke fetched from joke library.
+     *
+     * @param view that will display the toast
+     * */
     public void tellJoke(View view) {
         JokeTeller jokeTeller = new JokeTeller();
         Toast.makeText(this, jokeTeller.tellJoke(), Toast.LENGTH_LONG).show();
