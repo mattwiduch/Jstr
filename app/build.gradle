@@ -6,20 +6,25 @@ plugins {
 }
 apply plugin: 'com.android.application'
 apply plugin: 'jacoco-android'
-apply from: '../sonarqube.gradle'
 
-def APP_VERSION = "0.0.0"
-ext.set('AppVersion', APP_VERSION)
+// Apply SonarQube settings
+apply from: '../sonarqube.gradle'
+ext.set('AppVersion', androidGitVersion.name())
+apply from: project.property("RedRay.signing") + ".gradle";
+// Add signing config, if exists
+if (project.hasProperty("RedRay.signing")
+        && new File(project.property("RedRay.signing") + ".gradle").exists()) {
+    apply from: project.property("RedRay.signing") + ".gradle";
+}
 
 android {
     compileSdkVersion 24
     buildToolsVersion "24.0.0"
 
     defaultConfig {
-        applicationId "com.udacity.gradle.builditbigger"
+        applicationId 'eu.redray.jstr'
         minSdkVersion 15
         targetSdkVersion 24
-        versionCode androidGitVersion.code()
         versionName androidGitVersion.name()
         multiDexEnabled true
     }
@@ -47,13 +52,13 @@ android {
     }
     dexOptions {
         dexInProcess true
-        preDexLibraries false
-        javaMaxHeapSize "2048m"
+        preDexLibraries true
+        javaMaxHeapSize "2g"
     }
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'com.android.support:appcompat-v7:24.0.0'
     compile 'com.android.support:multidex:1.0.1'
     // Added for AdMob
