@@ -29,7 +29,7 @@ sonarqube {
 subprojects {
     sonarqube {
         properties {
-            property "sonar.sources", "src"
+            property "sonar.scm.provider", "git"
         }
     }
 }

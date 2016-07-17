@@ -59,6 +59,7 @@ dependencies {
     // Added for AdMob
     compile 'com.google.android.gms:play-services:9.2.1'
     compile project(':lib-jokes')
+    compile project(':lib-showjoke')
 }
 
 jacocoAndroidUnitTestReport {
