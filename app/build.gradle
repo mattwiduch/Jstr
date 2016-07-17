@@ -45,9 +45,6 @@ android {
         preDexLibraries true
         javaMaxHeapSize "2g"
     }
-    lintOptions {
-        abortOnError false
-    }
 }
 
 dependencies {
