@@ -9,7 +9,7 @@ import java.util.Random;
  */
 public class JokeTeller {
 
-    private ArrayList<String> mJokes = new ArrayList<>(Arrays.asList(
+    private final ArrayList<String> mJokes = new ArrayList<>(Arrays.asList(
             "Why do Java programmers wear glasses? \nBecause they cannot see Sharp!",
             "I had a problem so I thought to use Java... Now I have ProblemFactory!",
             "Programmer (noun.) - A machine that turns coffee into code.",
@@ -34,7 +34,7 @@ public class JokeTeller {
             "Software is like sex: It's better when it's free.",
             "There are 10 types of people in the world. Those who understand binary and those who get laid.",
             "Why programmers like UNIX? \nunzip, strip, touch, finger, grep, mount, fsck, more, "
-                    + " yes, fsck, fsck, fsck, umount, sleep",
+                    + " yes, fsck, fsck, fsck, unmount, sleep",
             "I've got a really good UDP joke to tell you, but I don't know if you'll get it.",
             "Programming is 10% science, 20% ingenuity, and 70% getting the ingenuity to work with the science.",
             "There are three kinds of lies: Lies, damned lies, and benchmarks.",
