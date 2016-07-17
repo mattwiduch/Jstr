@@ -12,6 +12,28 @@ buildscript {
     }
 }
 
+plugins {
+    id "org.sonarqube" version "2.0.1"
+}
+plugins {
+    id 'com.gladed.androidgitversion' version '0.2.13'
+}
+
+sonarqube {
+    properties {
+        property "sonar.sourceEncoding", "UTF-8"
+        property "sonar.projectVersion", androidGitVersion.name()
+    }
+}
+
+subprojects {
+    sonarqube {
+        properties {
+            property "sonar.sources", "src"
+        }
+    }
+}
+
 allprojects {
     repositories {
         jcenter()

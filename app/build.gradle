@@ -1,16 +1,6 @@
-plugins {
-    id "org.sonarqube" version "1.2"
-}
-plugins {
-    id 'com.gladed.androidgitversion' version '0.2.13'
-}
 apply plugin: 'com.android.application'
 apply plugin: 'jacoco-android'
 
-// Apply SonarQube settings
-apply from: '../sonarqube.gradle'
-ext.set('AppVersion', androidGitVersion.name())
-apply from: project.property("RedRay.signing") + ".gradle";
 // Add signing config, if exists
 if (project.hasProperty("RedRay.signing")
         && new File(project.property("RedRay.signing") + ".gradle").exists()) {
@@ -55,15 +45,19 @@ android {
         preDexLibraries true
         javaMaxHeapSize "2g"
     }
+    lintOptions {
+        abortOnError false
+    }
 }
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'com.android.support:appcompat-v7:24.0.0'
+    compile 'com.android.support:support-annotations:24.0.0'
     compile 'com.android.support:multidex:1.0.1'
     // Added for AdMob
     compile 'com.google.android.gms:play-services:9.2.1'
-    compile project (':lib-jokes')
+    compile project(':lib-jokes')
 }
 
 jacocoAndroidUnitTestReport {
@@ -75,3 +69,50 @@ jacocoAndroidUnitTestReport {
 jacoco {
     toolVersion = "0.7.5.201505241946"
 }
+
+// recommend to specify the flavor once and dynamically adapt paths to it
+def flavor = "develop" // flavor we want to have tested. Should be static
+def Flavor = "Develop" // flavor again, but starting with upper case
+
+// noinspection is used to remove some "warnings" from Android Studio
+sonarqube {
+    //noinspection GroovyAssignabilityCheck
+    properties {
+        /* SonarQube needs to be informed about your libraries and the android.jar to understand that methods like
+         * onResume() is called by the Android framework. Without that information SonarQube will very likely create warnings
+         * that those methods are never used and they should be removed. Same applies for libraries where parent classes
+         * are required to understand how a class works and is used. */
+        def libraries = project.android.sdkDirectory.getPath() + "/platforms/android-24/*.jar," +
+                "$project.buildDir/intermediates/**/*.jar,"
+
+        property "sonar.java.binaries", "$project.buildDir/intermediates/classes/${flavor}/debug"
+        property "sonar.java.libraries", libraries
+
+        property "sonar.tests", "src/test/java"
+        property "sonar.java.test.binaries", "$project.buildDir/intermediates/classes/${flavor}/debug"
+        property "sonar.java.test.libraries", libraries
+
+        property "sonar.scm.provider", "git"
+
+        // path to coverage reports
+        property "sonar.jacoco.reportPath", "$project.buildDir/jacoco/test${Flavor}DebugUnitTest.exec"
+        property "sonar.java.coveragePlugin", "jacoco"
+        // path to junit reports
+        property "sonar.junit.reportsPath", "$project.buildDir/test-results/${flavor}Debug"
+        // path to lint reports
+        property "sonar.android.lint.report", "$project.buildDir/outputs/lint-results-${flavor}Debug.xml"
+    }
+}
+
+import org.gradle.internal.os.OperatingSystem;
+
+task runSonar(type: Exec) {
+    workingDir "./"
+    def command = "../gradlew"
+    if (OperatingSystem.current().isWindows()) {
+        command = command + ".bat"
+    }
+    commandLine command, "clean", "assemble${Flavor}Debug", "assembleAndroidTest", "lint${Flavor}Debug", "jacocoTest${Flavor}DebugUnitTestReport"
+}
+
+runSonar.finalizedBy(rootProject.tasks["sonarqube"])
