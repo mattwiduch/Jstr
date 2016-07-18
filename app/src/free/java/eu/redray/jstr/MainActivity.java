@@ -7,6 +7,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.InterstitialAd;
+
 import eu.redray.showjokeactivity.ShowJokeActivity;
 
 /**
@@ -16,10 +20,24 @@ public class MainActivity extends AppCompatActivity implements EndpointsAsyncTas
 
     private static final String JOKE_KEY = "joke";
 
+    InterstitialAd mInterstitialAd;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // Setup interstitial ad
+        mInterstitialAd = new InterstitialAd(this);
+        mInterstitialAd.setAdUnitId(getString(R.string.interstitial_ad_unit_id));
+        requestNewInterstitial();
+        mInterstitialAd.setAdListener(new AdListener() {
+            @Override
+            public void onAdClosed() {
+                requestNewInterstitial();
+                new EndpointsAsyncTask(MainActivity.this).execute();
+            }
+        });
     }
 
 
@@ -51,7 +69,9 @@ public class MainActivity extends AppCompatActivity implements EndpointsAsyncTas
      * @param view that will display the toast
      */
     public void tellJoke(View view) {
-        new EndpointsAsyncTask(this).execute();
+        if (mInterstitialAd.isLoaded()) {
+            mInterstitialAd.show();
+        }
     }
 
     /**
@@ -65,5 +85,14 @@ public class MainActivity extends AppCompatActivity implements EndpointsAsyncTas
         intent.putExtra(MainActivity.JOKE_KEY, result);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
+    }
+
+    /** Requests new intersitial ad */
+    private void requestNewInterstitial() {
+        AdRequest adRequest = new AdRequest.Builder()
+                .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
+                .build();
+
+        mInterstitialAd.loadAd(adRequest);
     }
 }
