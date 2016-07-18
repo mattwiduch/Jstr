@@ -8,4 +8,15 @@
     android:layout_height="match_parent"
     tools:context="eu.redray.showjokeactivity.ShowJokeActivity">
 
+    <TextView
+        android:text="TextView"
+        android:layout_height="wrap_content"
+        android:id="@+id/joke_view"
+        android:layout_width="300dp"
+        app:layout_constraintLeft_toLeftOf="@+id/activity_show_joke"
+        tools:layout_constraintLeft_creator="1"
+        app:layout_constraintTop_toTopOf="@+id/activity_show_joke"
+        app:layout_constraintRight_toRightOf="@+id/activity_show_joke"
+        tools:layout_constraintRight_creator="1"
+        app:layout_constraintBottom_toBottomOf="@+id/activity_show_joke"/>
 </android.support.constraint.ConstraintLayout>
