@@ -1,9 +1,6 @@
 package com.udacity.gradle.jstr;
 
-import android.content.Context;
-import android.content.Intent;
 import android.os.AsyncTask;
-import android.support.v4.util.Pair;
 
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
@@ -11,43 +8,53 @@ import com.google.api.client.extensions.android.json.AndroidJsonFactory;
 import java.io.IOException;
 
 import eu.redray.jstr.backend.jokesApi.JokesApi;
-import eu.redray.showjokeactivity.ShowJokeActivity;
 
 /**
- * Created by frano on 18/07/2016.
+ * Async Task that retrieves joke String from GCE server.
  */
 
-class EndpointsAsyncTask extends AsyncTask<Pair<Context, String>, Void, String> {
-    private static JokesApi JokesApiService = null;
-    private Context context;
+class EndpointsAsyncTask extends AsyncTask<Void, Void, String> {
+    private static JokesApi mJokesApiService = null;
 
-    private static final String JOKE_KEY = "joke";
+    private EndpointsAsyncTaskListener mListener = null;
+
+    EndpointsAsyncTask(EndpointsAsyncTaskListener listener) {
+        mListener = listener;
+    }
 
     @Override
-    protected String doInBackground(Pair<Context, String>... params) {
-        if (JokesApiService == null) {  // Only do this once
+    protected String doInBackground(Void... params) {
+        if (mJokesApiService == null) {  // Only do this once
             JokesApi.Builder builder = new JokesApi.Builder(AndroidHttp.newCompatibleTransport(), new AndroidJsonFactory(), null)
                     .setRootUrl("https://jstr-1376.appspot.com/_ah/api/");
             // end options for devappserver
 
-            JokesApiService = builder.build();
+            mJokesApiService = builder.build();
         }
 
-        context = params[0].first;
-        //String name = params[0].second;
-
         try {
-            return JokesApiService.getJoke().execute().getData();
+            return mJokesApiService.getJoke().execute().getData();
         } catch (IOException e) {
             return e.getMessage();
         }
     }
 
+    public EndpointsAsyncTask setListener(EndpointsAsyncTaskListener listener) {
+        this.mListener = listener;
+        return this;
+    }
+
     @Override
     protected void onPostExecute(String result) {
-        Intent intent = new Intent(context, ShowJokeActivity.class);
-        intent.putExtra(EndpointsAsyncTask.JOKE_KEY, result);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        context.startActivity(intent);
+        if (this.mListener != null)
+            this.mListener.onComplete(result);
+    }
+
+    interface EndpointsAsyncTaskListener {
+        /** Performs desired action specified by class implementing this listener.
+         *
+         * @param result String containing joke received from GCE server
+         * */
+        void onComplete(String result);
     }
 }

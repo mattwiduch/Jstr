@@ -1,17 +1,20 @@
 package com.udacity.gradle.jstr;
 
-import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.util.Pair;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import eu.redray.showjokeactivity.ShowJokeActivity;
+
 /**
  * Jstr base activity.
  */
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements EndpointsAsyncTask.EndpointsAsyncTaskListener {
+
+    private static final String JOKE_KEY = "joke";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,13 +46,24 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * Launches an async task that will fetch joke from library and display it in new activity.
+     * Launches an async task that will fetch joke from library.
      *
      * @param view that will display the toast
      */
     public void tellJoke(View view) {
-        new EndpointsAsyncTask().execute(new Pair<Context, String>(this, null));
+        new EndpointsAsyncTask(this).execute();
     }
 
-
+    /**
+     * Displays fetched joke in new Activity.
+     *
+     * @param result String containing joke received from GCE server
+     */
+    @Override
+    public void onComplete(String result) {
+        Intent intent = new Intent(this, ShowJokeActivity.class);
+        intent.putExtra(MainActivity.JOKE_KEY, result);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+    }
 }
