@@ -9,7 +9,6 @@
     tools:context="eu.redray.showjokeactivity.ShowJokeActivity">
 
     <TextView
-        android:text="TextView"
         android:layout_height="wrap_content"
         android:id="@+id/joke_view"
         android:layout_width="300dp"
