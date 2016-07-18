@@ -1,4 +1,4 @@
-package com.udacity.gradle.jstr;
+package eu.redray.jstr;
 
 import android.os.AsyncTask;
 
