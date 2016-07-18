@@ -1,16 +1,19 @@
 package com.udacity.gradle.jstr;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import eu.redray.JokeTeller;
+import eu.redray.showjokeactivity.ShowJokeActivity;
 
 /** Jstr base activity. */
 public class MainActivity extends AppCompatActivity {
+
+    public static final String JOKE_KEY = "joke";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,8 +49,10 @@ public class MainActivity extends AppCompatActivity {
      * @param view that will display the toast
      * */
     public void tellJoke(View view) {
-        JokeTeller jokeTeller = new JokeTeller();
-        Toast.makeText(this, jokeTeller.tellJoke(), Toast.LENGTH_LONG).show();
+        Intent intent = new Intent(this, ShowJokeActivity.class);
+        intent.putExtra(MainActivity.JOKE_KEY, (new JokeTeller()).tellJoke());
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
     }
 
 
