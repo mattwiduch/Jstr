@@ -1,7 +1,6 @@
 package com.udacity.gradle.jstr;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.util.Pair;
 import android.support.v7.app.AppCompatActivity;
@@ -9,13 +8,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import eu.redray.JokeTeller;
-import eu.redray.showjokeactivity.ShowJokeActivity;
-
-/** Jstr base activity. */
+/**
+ * Jstr base activity.
+ */
 public class MainActivity extends AppCompatActivity {
-
-    private static final String JOKE_KEY = "joke";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,16 +42,13 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    /** Displays toast with a joke fetched from joke library.
+    /**
+     * Launches an async task that will fetch joke from library and display it in new activity.
      *
      * @param view that will display the toast
-     * */
+     */
     public void tellJoke(View view) {
         new EndpointsAsyncTask().execute(new Pair<Context, String>(this, "Manfred"));
-        Intent intent = new Intent(this, ShowJokeActivity.class);
-        intent.putExtra(MainActivity.JOKE_KEY, (new JokeTeller()).tellJoke());
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        //startActivity(intent);
     }
 
 
