@@ -13,7 +13,7 @@ import eu.redray.showjokeactivity.ShowJokeActivity;
 /** Jstr base activity. */
 public class MainActivity extends AppCompatActivity {
 
-    public static final String JOKE_KEY = "joke";
+    private static final String JOKE_KEY = "joke";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

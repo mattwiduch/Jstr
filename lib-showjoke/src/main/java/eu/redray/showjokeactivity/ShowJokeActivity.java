@@ -7,7 +7,7 @@ import android.widget.TextView;
 /** Displays joke received in intent extra */
 public class ShowJokeActivity extends AppCompatActivity {
 
-    public static final String JOKE_KEY = "joke";
+    private static final String JOKE_KEY = "joke";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
