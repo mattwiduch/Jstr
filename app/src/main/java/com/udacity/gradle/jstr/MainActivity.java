@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
      * @param view that will display the toast
      */
     public void tellJoke(View view) {
-        new EndpointsAsyncTask().execute(new Pair<Context, String>(this, "Manfred"));
+        new EndpointsAsyncTask().execute(new Pair<Context, String>(this, null));
     }
 
 
