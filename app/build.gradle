@@ -35,16 +35,19 @@ android {
     }
     productFlavors {
         develop {
-            // currently nothing special here
+            applicationId "eu.redray.jstr.development"
+            resValue "string", "app_name", "Jstr Dev"
         }
         free {
             applicationId "eu.redray.jstr.free"
+            resValue "string", "app_name", "Jstr Free"
             dependencies {
                 compile 'com.google.android.gms:play-services:9.2.1'
             }
         }
         paid {
             applicationId "eu.redray.jstr.paid"
+            resValue "string", "app_name", "Jstr"
         }
     }
 
