@@ -14,7 +14,7 @@ import eu.redray.jstr.backend.jokesApi.JokesApi;
  */
 
 class EndpointsAsyncTask extends AsyncTask<Void, Void, String> {
-    private static JokesApi mJokesApiService = null;
+    private JokesApi mJokesApiService = null;
 
     private EndpointsAsyncTaskListener mListener = null;
 
@@ -37,11 +37,6 @@ class EndpointsAsyncTask extends AsyncTask<Void, Void, String> {
         } catch (IOException e) {
             return e.getMessage();
         }
-    }
-
-    public EndpointsAsyncTask setListener(EndpointsAsyncTaskListener listener) {
-        this.mListener = listener;
-        return this;
     }
 
     @Override
