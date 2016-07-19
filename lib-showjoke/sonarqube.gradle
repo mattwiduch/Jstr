@@ -1,0 +1,37 @@
+sonarqube {
+    // Avoid false warnings from Android Studio by using noinspection
+    //noinspection GroovyAssignabilityCheck
+    properties {
+        // Set paths to project source & tests
+        property "sonar.sources", "src/main/java, src/main/res"
+        property "sonar.test", "src/androidTest/java"
+
+        // Set paths to project's libraries and binaries
+        def libraries = project.android.sdkDirectory.getPath() + "/platforms/android-24/*.jar," +
+                "$project.buildDir/intermediates/**/*.jar"
+        def binaries = "$project.buildDir/intermediates/classes/debug"
+
+        property "sonar.java.binaries", binaries
+        property "sonar.java.libraries", libraries
+        property "sonar.java.test.binaries", binaries
+        property "sonar.java.test.libraries", libraries
+        property "sonar.test", "$project.buildDir/androidTest/java"
+
+        // Set path to coverage reports
+        property "sonar.jacoco.reportPath", "$project.buildDir/jacoco/testDebugUnitTest.exec"
+        property "sonar.java.coveragePlugin", "jacoco"
+        // Set path to junit reports
+        property "sonar.junit.reportsPath", "$project.buildDir/test-results/Debug"
+        // Set path to lint reports
+        property "sonar.android.lint.report", "$project.buildDir/outputs/lint-results-Debug.xml"
+    }
+}
+
+task compileShowJoke(type: Exec) {
+    workingDir "./"
+    def command = "../gradlew"
+    if (org.gradle.internal.os.OperatingSystem.current().isWindows()) {
+        command = command + ".bat"
+    }
+    commandLine command, "clean", "assembleDebug", "assembleAndroidTest", "lintDebug", "jacocoTestDebugUnitTestReport"
+}
