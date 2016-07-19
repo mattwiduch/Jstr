@@ -21,8 +21,8 @@ public class MainActivity extends AppCompatActivity implements EndpointsAsyncTas
 
     private static final String JOKE_KEY = "joke";
 
-    InterstitialAd mInterstitialAd;
-    MenuItem miProgressBar;
+    private InterstitialAd mInterstitialAd;
+    private MenuItem miProgressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
