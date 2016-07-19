@@ -15,7 +15,6 @@ import java.util.concurrent.TimeUnit;
 @RunWith(AndroidJUnit4.class)
 public class ApplicationTest extends AndroidTestCase {
 
-    private static final String LOG_TAG = "JSTR-AndroidTest";
     private String mResult = null;
     private CountDownLatch mSignal = null;
 
