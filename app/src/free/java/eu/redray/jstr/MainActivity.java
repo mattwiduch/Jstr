@@ -9,7 +9,6 @@ import android.view.View;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.InterstitialAd;
-import com.udacity.gradle.jstr.R;
 
 import eu.redray.showjokeactivity.ShowJokeActivity;
 
