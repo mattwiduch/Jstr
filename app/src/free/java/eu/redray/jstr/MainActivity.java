@@ -4,7 +4,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
@@ -20,6 +22,7 @@ public class MainActivity extends AppCompatActivity implements EndpointsAsyncTas
     private static final String JOKE_KEY = "joke";
 
     InterstitialAd mInterstitialAd;
+    MenuItem miProgressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +47,7 @@ public class MainActivity extends AppCompatActivity implements EndpointsAsyncTas
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
+        miProgressBar = menu.findItem(R.id.item_progress_bar);
         return true;
     }
 
@@ -53,6 +57,7 @@ public class MainActivity extends AppCompatActivity implements EndpointsAsyncTas
      * @param view that will display the toast
      */
     public void tellJoke(View view) {
+        miProgressBar.setVisible(true);
         if (mInterstitialAd.isLoaded()) {
             mInterstitialAd.show();
         }
@@ -65,13 +70,21 @@ public class MainActivity extends AppCompatActivity implements EndpointsAsyncTas
      */
     @Override
     public void onComplete(String result) {
-        Intent intent = new Intent(this, ShowJokeActivity.class);
-        intent.putExtra(MainActivity.JOKE_KEY, result);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(intent);
+        if (result.startsWith("timeout") || result.startsWith("404")) {
+            miProgressBar.setVisible(false);
+            Toast.makeText(this, "Couldn't connect to server", Toast.LENGTH_LONG).show();
+        } else {
+            Intent intent = new Intent(this, ShowJokeActivity.class);
+            intent.putExtra(MainActivity.JOKE_KEY, result);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            miProgressBar.setVisible(false);
+            startActivity(intent);
+        }
     }
 
-    /** Requests new intersitial ad */
+    /**
+     * Requests new interstitial ad
+     */
     private void requestNewInterstitial() {
         AdRequest adRequest = new AdRequest.Builder()
                 .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
